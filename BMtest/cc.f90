@@ -194,8 +194,7 @@ PROGRAM Two_Filter_Cross_Correlation
   tau_counter = 0
 
   ! Initialise the seed for random number generation
-  !CALL init_random_seed
-  ! commented to get the same random number sequence
+  CALL init_random_seed
 
   ! Intialise Runge-Kutta vectors
   k1 = 0
@@ -416,8 +415,9 @@ PROGRAM Two_Filter_Cross_Correlation
        ! we want to check all possibilities, temp_bm will cycle
        ! through all of them, checking agains last_sect
        IF (last_sect == temp_bm) THEN
-          WRITE(3,*) k, last_sect, photon_a, photon_b, p_gg, p_ee, p_ff,&
-               & prob_atom_decay, prob_t_a, prob_r_a, prob_t_b, prob_r_b
+          WRITE(3,'(2I12,10E20.12)') k, last_sect, photon_a, photon_b, p_gg, &
+               & p_ee, p_ff, prob_atom_decay, prob_t_a, prob_r_a, prob_t_b, &
+               & prob_r_b
           IF (temp_bm < 4) THEN ! reset the cycle or advance the cycle
              temp_bm = temp_bm + 1
           ELSE
@@ -951,8 +951,10 @@ SUBROUTINE init_random_seed()
   INTEGER, DIMENSION(:), ALLOCATABLE :: seed
   CALL RANDOM_SEED(size = n)
   ALLOCATE(seed(n))
-  CALL SYSTEM_CLOCK(COUNT=clock)
-  seed = clock + 37 * (/ (l - 1, l = 1, n) /)
+  !CALL SYSTEM_CLOCK(COUNT=clock)
+  !seed = clock + 37 * (/ (l - 1, l = 1, n) /)
+  ! create a constant seed (remove clock component)
+  seed = 37 * (/ (l - 1, l = 1, n) /)
   CALL RANDOM_SEED(PUT = seed)
   DEALLOCATE(seed)
 END SUBROUTINE init_random_seed
