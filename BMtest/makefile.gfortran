@@ -1,0 +1,21 @@
+#!/bin/sh
+##
+## To compile the code run "make" if this file is named "makefile",
+##   otherwise run "make -f <name_of_this_makefile"
+##
+
+# specify the compiler
+FC = gfortran
+# specify the compiler flags
+FFLAGS = -O3 -march=native -mtune=native
+
+## shouldn't need to change anything below here
+
+cc: cc.o
+	$(FC) $(FFLAGS) -o $@ $^
+
+cc.o: cc.f90
+	$(FC) -c $(FFLAGS) $^
+
+clean:
+	rm -f cc cc.o
