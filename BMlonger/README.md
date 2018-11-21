@@ -2,8 +2,8 @@
 
 ## Timings on Mahuika
 
-| Case                          | Time (s) |
-|-------------------------------|----------|
-| Initial, ifort                | 254.6    |
-| Initial, ifort                | 254.8    |
-| Initial, ifort                | 254.6    |
+| Case                          | Time (s)    |
+|-------------------------------|-------------|
+| Initial, ifort                | 254.7 ± 0.0 |
+| Precalc, ifort                | 229.8 ± 0.1 |
+

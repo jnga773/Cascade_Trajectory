@@ -150,6 +150,14 @@ PROGRAM Two_Filter_Cross_Correlation
   INTEGER :: last_sect
   ! temporal variable to compare against last_sect and cycle in benchmark
   INTEGER :: temp_bm
+  
+  ! optimisations
+  COMPLEX(KIND=8), DIMENSION(3,3) :: cassig_a_term
+  COMPLEX(KIND=8), DIMENSION(3,3) :: cassig_b_term
+  REAL(KIND=8), DIMENSION(0:N) :: sqrt_nab
+  REAL(KIND=8) :: j_real
+  COMPLEX(KIND=8), PARAMETER :: D_a_term = D_a - i * kappa_a
+  COMPLEX(KIND=8), PARAMETER :: D_b_term = D_b - i * kappa_b
 
   OPEN(UNIT=3, file=filename_test, STATUS='replace', ACTION='write')
   
@@ -166,6 +174,17 @@ PROGRAM Two_Filter_Cross_Correlation
   ! S_+ x S_-
   sigmapm = 0
   sigmapm = MATMUL(sigmap, sigmam)
+
+  ! optimisations
+  cassig_a_term = -i * SQRT(0.5 * gamma * kappa_a) * sigmam
+  cassig_b_term = -i * SQRT(0.5 * gamma * kappa_b) * sigmam
+
+  ! precompute some square roots
+  DO j = 0, N
+!    j_real = REAL(j, KIND=8)
+!    sqrt_nab(j) = SQRT(j_real)
+    sqrt_nab(j) = SQRT(1.0 * j)
+  END DO
 
   ! Full Hamiltonian
   H = 0
@@ -454,19 +473,17 @@ PROGRAM Two_Filter_Cross_Correlation
           nplace = (3 * (N + 1) * na) + (3 * nb)
           ! Set the Hamiltonian to include cavity terms
           H_full = H
-          H_full(1,1) = H_full(1,1) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(2,2) = H_full(2,2) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(3,3) = H_full(3,3) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
+          H_full(1,1) = H_full(1,1) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(2,2) = H_full(2,2) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(3,3) = H_full(3,3) + D_a_term * na &
+                                  & + D_b_term * nb
           ! Hamiltonian matrix for cascade system
           ! cavity a
-          cassig_a = 0
-          cassig_a = -i * DSQRT(0.5 * gamma * kappa_a) * SQRT(1.0 * na) * sigmam
+          cassig_a = cassig_a_term * sqrt_nab(na)
           ! cavity b
-          cassig_b = 0
-          cassig_b = -i * DSQRT(0.5 * gamma * kappa_b) * SQRT(1.0 * nb) * sigmam
+          cassig_b = cassig_b_term * sqrt_nab(nb)
           ! Matrix multiplication
           DO m=1,3
             k1(nplace + m) = -i * dt * H_full(m,1) * psi_clone(nplace + 1) &
@@ -507,19 +524,17 @@ PROGRAM Two_Filter_Cross_Correlation
           nplace = (3 * (N + 1) * na) + (3 * nb)
           ! Set the Hamiltonian to include cavity terms
           H_full = H
-          H_full(1,1) = H_full(1,1) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(2,2) = H_full(2,2) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(3,3) = H_full(3,3) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
+          H_full(1,1) = H_full(1,1) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(2,2) = H_full(2,2) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(3,3) = H_full(3,3) + D_a_term * na &
+                                  & + D_b_term * nb
           ! Hamiltonian matrix for cascade system
           ! cavity a
-          cassig_a = 0
-          cassig_a = -i * DSQRT(0.5 * gamma * kappa_a) * SQRT(1.0 * na) * sigmam
+          cassig_a = cassig_a_term * sqrt_nab(na)
           ! cavity b
-          cassig_b = 0
-          cassig_b = -i * DSQRT(0.5 * gamma * kappa_b) * SQRT(1.0 * nb) * sigmam
+          cassig_b = cassig_b_term * sqrt_nab(nb)
           ! Matrix multiplication
           DO m=1,3
             k2(nplace + m) = -i * dt * H_full(m,1) * &
@@ -569,19 +584,17 @@ PROGRAM Two_Filter_Cross_Correlation
           nplace = (3 * (N + 1) * na) + (3 * nb)
           ! Set the Hamiltonian to include cavity terms
           H_full = H
-          H_full(1,1) = H_full(1,1) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(2,2) = H_full(2,2) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(3,3) = H_full(3,3) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
+          H_full(1,1) = H_full(1,1) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(2,2) = H_full(2,2) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(3,3) = H_full(3,3) + D_a_term * na &
+                                  & + D_b_term * nb
           ! Hamiltonian matrix for cascade system
           ! cavity a
-          cassig_a = 0
-          cassig_a = -i * DSQRT(0.5 * gamma * kappa_a) * SQRT(1.0 * na) * sigmam
+          cassig_a = cassig_a_term * sqrt_nab(na)
           ! cavity b
-          cassig_b = 0
-          cassig_b = -i * DSQRT(0.5 * gamma * kappa_b) * SQRT(1.0 * nb) * sigmam
+          cassig_b = cassig_b_term * sqrt_nab(nb)
           ! Matrix multiplication
           DO m=1,3
             k3(nplace + m) = -i * dt * H_full(m,1) * &
@@ -631,19 +644,17 @@ PROGRAM Two_Filter_Cross_Correlation
           nplace = (3 * (N + 1) * na) + (3 * nb)
           ! Set the Hamiltonian to include cavity terms
           H_full = H
-          H_full(1,1) = H_full(1,1) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(2,2) = H_full(2,2) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
-          H_full(3,3) = H_full(3,3) + (D_a - i * kappa_a) * na &
-                                  & + (D_b - i * kappa_b) * nb
+          H_full(1,1) = H_full(1,1) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(2,2) = H_full(2,2) + D_a_term * na &
+                                  & + D_b_term * nb
+          H_full(3,3) = H_full(3,3) + D_a_term * na &
+                                  & + D_b_term * nb
           ! Hamiltonian matrix for cascade system
           ! cavity a
-          cassig_a = 0
-          cassig_a = -i * DSQRT(0.5 * gamma * kappa_a) * SQRT(1.0 * na) * sigmam
+          cassig_a = cassig_a_term * sqrt_nab(na)
           ! cavity b
-          cassig_b = 0
-          cassig_b = -i * DSQRT(0.5 * gamma * kappa_b) * SQRT(1.0 * nb) * sigmam
+          cassig_b = cassig_b_term * sqrt_nab(nb)
           ! Matrix multiplication
           DO m=1,3
             k4(nplace + m) = -i * dt * H_full(m,1) * &

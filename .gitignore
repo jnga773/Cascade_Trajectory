@@ -2,3 +2,5 @@ cc
 cc.o
 BMtest.txt
 slurm-*.out
+makefile
+*.optrpt
