@@ -1,4 +1,3 @@
-from pylab import *
 
 fo = open('./BMoriginal.txt','r')
 ft = open('./BMtest.txt','r')
@@ -25,7 +24,7 @@ for j in range(len(lo)):
     tempt = [float(k) for k in lt[j].split()]
     for l in range(2,12):
         if (tempo[l] != tempt[l]):
-            print('*********************')            
+            print('*********************')
             print('Deviation detected!')
             print('*********************')
             print('Time step = ' + str(tempt[0]))
