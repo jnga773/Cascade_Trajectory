@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
 
-enable_language(Fortran)
+project(cross_correlation LANGUAGES Fortran)
 
 option(DOUBLE_PRECISION "Set precision to double" OFF)
 
@@ -19,3 +19,5 @@ endif()
 
 add_executable(cross_correlation cross_correlation.f90)
 
+# add BMtest directory
+add_subdirectory(BMtest)
