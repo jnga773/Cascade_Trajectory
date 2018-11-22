@@ -70,9 +70,9 @@ PROGRAM Two_Filter_Cross_Correlation
   ! Time step
   REAL(KIND=8), PARAMETER :: dt = 0.001
   ! Max time in units of \gamma \tau
-  REAL(KIND=8), PARAMETER :: max_time = 1000
+  REAL(KIND=8) :: max_time
   ! Total steps
-  INTEGER(KIND=8), PARAMETER :: steps = INT(max_time / dt, KIND=8)
+  INTEGER(KIND=8) :: steps
   ! Max time for tau calculations
   REAL(KIND=8), PARAMETER :: tau = 10
   ! Max number of time steps for tau calculations
@@ -151,6 +151,27 @@ PROGRAM Two_Filter_Cross_Correlation
   ! temporal variable to compare against last_sect and cycle in benchmark
   INTEGER :: temp_bm
 
+  ! variables for reading command line arguments
+  INTEGER :: nargs
+  INTEGER :: ios
+  CHARACTER(LEN=32) :: buffer
+
+  ! read arguments to set number of steps for testing
+  nargs = COMMAND_ARGUMENT_COUNT()
+  IF (nargs .NE. 1) THEN
+    ! default
+    max_time = 1000.0
+  ELSE
+    CALL GET_COMMAND_ARGUMENT(1, buffer)
+    READ(buffer, *, iostat=ios) max_time
+    IF (ios .NE. 0) stop 'error reading max_time argument'
+  END IF
+
+  ! set the number of steps based on input
+  steps = INT(max_time / dt, KIND=8)
+  print *, "MAX TIME AND STEPS: ", max_time, steps
+
+  ! open output file
   OPEN(UNIT=3, file=filename_test, STATUS='replace', ACTION='write')
   
   ! Initialising matrices
