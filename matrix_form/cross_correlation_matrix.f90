@@ -207,7 +207,7 @@ PROGRAM Two_Filter_Cross_Correlation
       nplace_pm2 = (3 * (N + 1) * na) + (3 * (nb - 1))
       DO m=1,3
         a(nplace_pm1 + m, nplace + m) = SQRT(1.0 * na)
-        b(nplace_pm1 + m, nplace + m) = SQRT(1.0 * nb)
+        b(nplace_pm2 + m, nplace + m) = SQRT(1.0 * nb)
       END DO
     END DO
   END DO
