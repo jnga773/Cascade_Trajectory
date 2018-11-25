@@ -9,8 +9,15 @@ if len(sys.argv) != 2 or not os.path.exists(sys.argv[1]):
     print("Usage: python BM.py <REFERENCE_FILE>")
     sys.exit(1)
 
-fo = open(sys.argv[1],'r')
-ft = open('./BMtest.txt','r')
+ref_file = sys.argv[1]
+new_file = "BMtest.txt"
+
+print("Comparing files:")
+print("  Ref: %s" % ref_file)
+print("  New: %s" % new_file)
+
+fo = open(ref_file, 'r')
+ft = open(new_file, 'r')
 lo = fo.readlines()
 lt = ft.readlines()
 fo.close()
@@ -48,3 +55,5 @@ for j in range(len(lo)):
 
 if count_diff > 0:
     sys.exit(1)
+
+print("Files match")

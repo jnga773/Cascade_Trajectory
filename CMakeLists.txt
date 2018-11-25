@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 3.0)
-
 project(cross_correlation LANGUAGES Fortran)
+
+# add testing, can be disabled with -DBUILD_TESTING=OFF
+include(CTest)
 
 option(DOUBLE_PRECISION "Set precision to double" ON)
 
