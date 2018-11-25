@@ -164,12 +164,15 @@ PROGRAM Two_Filter_Cross_Correlation
   ELSE
     CALL GET_COMMAND_ARGUMENT(1, buffer)
     READ(buffer, *, iostat=ios) max_time
-    IF (ios .NE. 0) stop 'error reading max_time argument'
+    IF (ios .NE. 0) THEN
+      PRINT *, 'error reading max_time argument'
+      CALL EXIT(1)
+    END IF
   END IF
 
   ! set the number of steps based on input
   steps = INT(max_time / dt, KIND=8)
-  print *, "MAX TIME AND STEPS: ", max_time, steps
+  PRINT *, "MAX TIME AND STEPS: ", max_time, steps
 
   ! open output file
   OPEN(UNIT=3, file=filename_test, STATUS='replace', ACTION='write')
