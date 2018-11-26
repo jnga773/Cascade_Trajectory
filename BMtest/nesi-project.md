@@ -60,9 +60,15 @@ underneath the build directory.
 
 ## Benchmarks after precision change
 
+Timings on Mahuika with Intel compiler (note this is the original version apart
+from precision change). Single precision was configured with `cmake -DDOUBLE_PRECISION=OFF`.
 
+| Precision    | Timings (s)   |
+|--------------|---------------|
+| Double       | 243.8 ± 1.2   |
+| Single       | 221.3 ± 1.3   |
 
-
+Approximately 9.2 % reduction in run time from using single precision.
 
 
 ## Matrix version
