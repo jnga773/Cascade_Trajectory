@@ -61,3 +61,13 @@ underneath the build directory.
 ## Benchmarks after precision change
 
 
+
+
+
+
+## Matrix version
+
+There is also "matrix" version, which constructs a matrix at the beginning
+and uses that for the integration, instead of recalculating a number of
+values. Need to add benchmarks.
+
