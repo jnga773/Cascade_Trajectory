@@ -27,9 +27,9 @@ PROGRAM Two_Filter_Cross_Correlation
   ! Detuning of cavity "a" resonance frequency with drive frequency
   ! \Delta_{f} = \omega_{0} - \omega_{d}. \Delta_{f} = 0 is resonant with
   ! \omega_{gf} / 2 if \delta = 0.
-  REAL, PARAMETER :: D_a = -60.0
+  REAL, PARAMETER :: D_a = -wm
   ! Detuning of cavity "b" resonance frequency with drive frequency
-  REAL, PARAMETER :: D_b = 60.0
+  REAL, PARAMETER :: D_b = wm
   ! Cavity linewidth/transmission of cavity a
   REAL, PARAMETER :: kappa_a = 10.0
   ! Cavity linewidth/transmission of cavity b
