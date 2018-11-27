@@ -4,36 +4,36 @@ PROGRAM Two_Filter_Cross_Correlation
 
   ! Parameters in terms of decay rate gamma
   ! Atom decay rate
-  REAL(KIND=8), PARAMETER :: gamma = 1.0
+  REAL, PARAMETER :: gamma = 1.0
   ! Drive strength (Rabi Frequency)
-  REAL(KIND=8), PARAMETER :: omega = 40.0
+  REAL, PARAMETER :: omega = 40.0
   ! Drive detuning from two-photon resonance, \omega_{d} - \omega_{gf}
-  REAL(KIND=8), PARAMETER :: delta = 0.0
+  REAL, PARAMETER :: delta = 0.0
   ! Drive strength ratio of the two levels, |g> <-> |e> and |e> <-> |f>
-  REAL(KIND=8), PARAMETER :: xi = 1.0
+  REAL, PARAMETER :: xi = 1.0
   ! Difference between two energy levels, \omega_{ef} - \omega_{ge}
-  REAL(KIND=8), PARAMETER :: alpha = -120
+  REAL, PARAMETER :: alpha = -120.0
 
   ! Eigenfrequencies for position of spectrum peaks for delta = 0
   ! eigen drive strength
-  REAL(KIND=8), PARAMETER :: Omega_t = SQRT(((0.25*alpha)**2) + ((0.5*omega) &
+  REAL, PARAMETER :: Omega_t = SQRT(((0.25*alpha)**2) + ((0.5*omega) &
                                      & ** 2) * (1 + (xi ** 2)))
   ! Positive eigenfrequency
-  REAL(KIND=8), PARAMETER :: wp = -(0.25 * alpha) + Omega_t
+  REAL, PARAMETER :: wp = -(0.25 * alpha) + Omega_t
   ! Negative eigenfrequency
-  REAL(KIND=8), PARAMETER :: wm = -(0.25 * alpha) - Omega_t
+  REAL, PARAMETER :: wm = -(0.25 * alpha) - Omega_t
 
   ! Filter parameter stuff
   ! Detuning of cavity "a" resonance frequency with drive frequency
   ! \Delta_{f} = \omega_{0} - \omega_{d}. \Delta_{f} = 0 is resonant with
   ! \omega_{gf} / 2 if \delta = 0.
-  REAL(KIND=8), PARAMETER :: D_a = -60.0
+  REAL, PARAMETER :: D_a = -60.0
   ! Detuning of cavity "b" resonance frequency with drive frequency
-  REAL(KIND=8), PARAMETER :: D_b = 60.0
+  REAL, PARAMETER :: D_b = 60.0
   ! Cavity linewidth/transmission of cavity a
-  REAL(KIND=8), PARAMETER :: kappa_a = 10.0
+  REAL, PARAMETER :: kappa_a = 10.0
   ! Cavity linewidth/transmission of cavity b
-  REAL(KIND=8), PARAMETER :: kappa_b = 10.0
+  REAL, PARAMETER :: kappa_b = 10.0
 
   ! Quantum object stuff
   ! Hilbert Space - max number of photons in cavity 0 -> N
@@ -45,35 +45,35 @@ PROGRAM Two_Filter_Cross_Correlation
   ! the Fock basis for cavity a,|Nb> is the Fock basis for cavity b, and
   ! i=g,e,f are the atomic states |g>, |e>, |f>.
   ! psi = |Na>|Nb>|i> = |0,0,g> + |0,0,e> + |0,0,f> + |0,1,g> + ...+|1,1,f> +...
-  COMPLEX(KIND=8), DIMENSION(d_Hilb) :: psi
+  COMPLEX, DIMENSION(d_Hilb) :: psi
   ! A copy of the state vector for calculations
-  COMPLEX(KIND=8), DIMENSION(d_Hilb) :: psi_clone
+  COMPLEX, DIMENSION(d_Hilb) :: psi_clone
   ! A copy of the state vector for a cavity jump
-  COMPLEX(KIND=8), DIMENSION(d_Hilb) :: psi_cav
+  COMPLEX, DIMENSION(d_Hilb) :: psi_cav
 
   ! Operator matrix stuff
   ! Non-Hermitian Hamiltonian for continuous evolution
-  COMPLEX(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: H
+  COMPLEX, DIMENSION(d_Hilb, d_Hilb) :: H
   ! Atom decay operators in extended basis
-  REAL(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: sigmam, sigmap, sigmapm
+  REAL, DIMENSION(d_Hilb, d_Hilb) :: sigmam, sigmap, sigmapm
   ! Lowering and raising operators for cavity a
-  REAL(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: a, a_dag
+  REAL, DIMENSION(d_Hilb, d_Hilb) :: a, a_dag
   ! Lowering and raising operators for cavity b
-  REAL(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: b, b_dag
+  REAL, DIMENSION(d_Hilb, d_Hilb) :: b, b_dag
   ! Number operator for cavity a N_s = a^{\dagger} a
-  REAL(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: N_a
+  REAL, DIMENSION(d_Hilb, d_Hilb) :: N_a
   ! Number operator for cavity b N_b = b^{\dagger} b
-  REAL(KIND=8), DIMENSION(d_Hilb, d_Hilb) :: N_b
+  REAL, DIMENSION(d_Hilb, d_Hilb) :: N_b
 
   ! Time stuff
   ! Time step
-  REAL(KIND=8), PARAMETER :: dt = 0.001
+  REAL, PARAMETER :: dt = 0.001
   ! Max time in units of \gamma \tau
-  REAL(KIND=8), PARAMETER :: max_time = 100000
+  REAL, PARAMETER :: max_time = 100000
   ! Total steps
   INTEGER(KIND=8), PARAMETER :: steps = INT(max_time / dt, KIND=8)
   ! Max time for tau calculations
-  REAL(KIND=8), PARAMETER :: tau = 10.0
+  REAL, PARAMETER :: tau = 10.0
   ! Max number of time steps for tau calculations
   INTEGER, PARAMETER :: tau_max = INT(tau / dt)
 
@@ -90,21 +90,21 @@ PROGRAM Two_Filter_Cross_Correlation
   ! Integer place for photon number in psi vector (na + 1) * (nb + 1)
   INTEGER :: nplace, nplace_pm1, nplace_pm2
   ! Complex i = SQRT(-1)
-  COMPLEX(KIND=8), PARAMETER :: i = CMPLX(0,1)
+  COMPLEX, PARAMETER :: i = CMPLX(0,1)
   ! List of square roots
-  REAL(KIND=8), DIMENSION(0:2*N) :: sqrt_n
+  REAL, DIMENSION(0:2*N) :: sqrt_n
   ! Runge-Kutta 4th Order Vectors/Matrices
-  COMPLEX(KIND=8), DIMENSION(d_Hilb) :: k1, k2, k3, k4
+  COMPLEX, DIMENSION(d_Hilb) :: k1, k2, k3, k4
   ! 1 / 6 as a parameter to be calculated only once
-  REAL(KIND=8), PARAMETER :: xis = 1.0 / 6.0
+  REAL, PARAMETER :: xis = 1.0 / 6.0
   ! Random number to be called fromm RANDOM_NUMBER()
-  REAL(KIND=8) :: rand
+  REAL :: rand
   ! Trace for normalisation
-  REAL(KIND=8) :: trace
+  REAL :: trace
   ! Square root of the trace
-  REAL(KIND=8) :: tracesq
+  REAL :: tracesq
   ! Temporal variables
-  COMPLEX(KIND=8) :: temp, temp1, temp2
+  COMPLEX :: temp, temp1, temp2
   ! Temportal integer
   INTEGER :: tempint
   ! Jump counters
@@ -112,55 +112,55 @@ PROGRAM Two_Filter_Cross_Correlation
 
   ! Time saver stuff
   ! Cavity a Hamiltonian constant
-  COMPLEX(KIND=8), PARAMETER :: H_a = D_a - i * kappa_a
+  COMPLEX, PARAMETER :: H_a = D_a - i * kappa_a
   ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
-  COMPLEX(KIND=8), PARAMETER :: cas_a = SQRT(0.5 * gamma * kappa_a)
+  COMPLEX, PARAMETER :: cas_a = SQRT(0.5 * gamma * kappa_a)
   ! Cavity b Hamiltonian constant
-  COMPLEX(KIND=8), PARAMETER :: H_b = D_b - i * kappa_b
+  COMPLEX, PARAMETER :: H_b = D_b - i * kappa_b
   ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
-  COMPLEX(KIND=8), PARAMETER :: cas_b = SQRT(0.5 * gamma * kappa_b)
+  COMPLEX, PARAMETER :: cas_b = SQRT(0.5 * gamma * kappa_b)
   ! Squrare root of half gamma
-  REAL(KIND=8), PARAMETER :: sqrt_gamma = SQRT(0.5 * gamma)
+  REAL, PARAMETER :: sqrt_gamma = SQRT(0.5 * gamma)
   ! Square root of kappa_a
-  REAL(KIND=8), PARAMETER :: sqrt_kappa_a = SQRT(kappa_a)
+  REAL, PARAMETER :: sqrt_kappa_a = SQRT(kappa_a)
   ! Square root of kappa_b
-  REAL(KIND=8), PARAMETER :: sqrt_kappa_b = SQRT(kappa_b)
+  REAL, PARAMETER :: sqrt_kappa_b = SQRT(kappa_b)
   ! Square root of gamma * kappa_a
-  REAL(KIND=8), PARAMETER :: sqrt_gamma_a = SQRT(gamma * kappa_a)
+  REAL, PARAMETER :: sqrt_gamma_a = SQRT(gamma * kappa_a)
   ! Square root of gamma * kappa_b
-  REAL(KIND=8), PARAMETER :: sqrt_gamma_b = SQRT(gamma * kappa_b)
+  REAL, PARAMETER :: sqrt_gamma_b = SQRT(gamma * kappa_b)
 
   ! Probability stuff
   ! Probability to jump for cavity a
-  REAL(KIND=8) :: prob_t_a, prob_r_a
+  REAL :: prob_t_a, prob_r_a
   ! Probability to jump for cavity b
-  REAL(KIND=8) :: prob_t_b, prob_r_b
+  REAL :: prob_t_b, prob_r_b
   ! Probability for an atomic decay gamma * dt * <\Sigma^{\dagger}\Sigma>
-  REAL(KIND=8) :: prob_atom_decay
+  REAL :: prob_atom_decay
   ! Total probability
-  REAL(KIND=8) :: prob_total
+  REAL :: prob_total
   ! Probability Array
-  REAL(KIND=8), DIMENSION(4) :: P
+  REAL, DIMENSION(4) :: P
 
   ! Data stuff
   ! State probabilities of the atom (|g>, |e>, |f>)
-  REAL(KIND=8) :: p_gg, p_ee, p_ff
+  REAL :: p_gg, p_ee, p_ff
   ! Photon number inside cavity a and b
-  REAL(KIND=8) :: photon_a, photon_b
+  REAL :: photon_a, photon_b
   ! Steady state mean photon in cavity a and b
-  REAL(KIND=8) :: mean_photon_a, mean_photon_b
+  REAL :: mean_photon_a, mean_photon_b
   ! Check to start writing correlation
   LOGICAL :: corr_write
   ! Correlation calculation
-  REAL(KIND=8) :: corr
+  REAL :: corr
   ! Integer for correlation array
   INTEGER :: tau_counter
   ! Recording counters
   INTEGER :: number_of_recordings
   ! Array to store correlation
-  REAL(KIND=8), DIMENSION(0:tau_max) :: correlation
+  REAL, DIMENSION(0:tau_max) :: correlation
   ! Array to store cross correlation
-  REAL(KIND=8), DIMENSION(0:tau_max) :: cross_correlation
+  REAL, DIMENSION(0:tau_max) :: cross_correlation
   ! File name for saving correlation and cross correlation data
   CHARACTER(LEN=32) :: filename_correlation = "./data_files/correlation_mat.txt"
   ! Filename for saving parameters and time
