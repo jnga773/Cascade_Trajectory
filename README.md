@@ -11,7 +11,10 @@ plot_correlation_traj.py is a python code using numpy and matplotlib.pyplot to p
 For the NeSI project we work in the BMtest directory, in cc.f90. This code prints out an
 output file that can be compared with a reference file to ensure the results have not changed.
 
-Check the README in BMtest.
+There are two versions of the benchmark case; the original version is cc.f90 and the matrix
+version is cc_matrix.f90. Both give the same results.
+
+Check the README in BMtest too.
 
 ## Building the code
 
@@ -32,10 +35,20 @@ cmake ..
 make VERBOSE=1
 ```
 
-To run the shorter test case:
+To run the shorter test cases:
 
 ```
 ctest -R short -V
 ```
 
-There is a longer test case that is used for benchmarking.
+There are two shorter test cases, one for the original version and one for the matrix
+version.
+
+To list all available test cases run: `ctest -N`. Then `ctest -R <regular-expression> -V`
+can be used to run tests that match the given regular expression.
+
+There is a longer test case that is used for benchmarking, e.g.:
+
+```
+ctest -R long -V
+```
