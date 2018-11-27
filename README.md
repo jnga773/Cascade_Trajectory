@@ -31,8 +31,8 @@ mkdir build && cd build  # the directory can be called anything you like
 # build with default options
 cmake ..
 
-# compile
-make VERBOSE=1
+# compile using Intel compiler
+FC=ifort make VERBOSE=1
 ```
 
 To run the shorter test cases:
