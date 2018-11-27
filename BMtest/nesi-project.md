@@ -70,10 +70,13 @@ on Mahuika.
 ## Standardising precision
 
 * Remove `(KIND=8)` from `REAL` and `COMPLEX` variable declarations
-* Use command line options instead
+* Use command line options when building the code manually:
   - default if you don't specify any extra option is single precision
   - if you specify `-r8` with ifort or `-fdefault-real-8` with gfortran you
     will have double precision
+* With the CMake build:
+  - the default is to build using double precision
+  - to build with single precision use: `cmake -DDOUBLE_PRECISION=OFF`
 
 Note, timings will probably be different now.
 
