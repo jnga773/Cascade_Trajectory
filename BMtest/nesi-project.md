@@ -20,8 +20,8 @@ in there, e.g.:
 mkdir build
 cd build
 
-# configure
-cmake .. -DDOUBLE_PRECISION=ON
+# configure with intel compiler
+FC=ifort cmake .. -DDOUBLE_PRECISION=ON
 
 # compile
 make
