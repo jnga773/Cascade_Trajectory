@@ -127,6 +127,7 @@ Reducing the number of `i * dt` calculations resulted in the following timings
 ## Todo
 
 * Finish optimising the current code doing a single run
+* consider restructuring code with functions (less repeated code)
 * add scripts for running array jobs for many shorter runs at once
 * scripts for parameter sweeps?
 
