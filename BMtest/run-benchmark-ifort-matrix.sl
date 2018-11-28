@@ -5,8 +5,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --hint=nomultithread
-#SBATCH --mem=100M
-#SBATCH --partition=large,prepost
+#SBATCH --mem=500M
+#SBATCH --partition=large
 
 # set the Fortran compiler
 export FC=ifort

@@ -98,17 +98,30 @@ There is also "matrix" version, which constructs a matrix at the beginning
 and uses that for the integration, instead of recalculating a number of
 values. Need to add benchmarks.
 
-| Version      | Timings (s)   |
-|--------------|---------------|
-| Original     | 243.8 ± 1.2   |
-| Matrix       | 240.6 ± 1.0   |
+| Version                     | Timings (s)   |
+|-----------------------------|---------------|
+| Original, double precision  | 243.8 ± 1.2   |
+| Matrix, double precision    | 240.6 ± 1.0   |
 
 Initial results show the matrix version has similar performance. Need to look
 closer at the code. In both cases there are optimisations that can be made,
 such as taking out the `i * dt`. Will work on these next.
 
+## Other optimisations
 
+Reducing the number of `i * dt` calculations resulted in the following timings
 
+| Version                    | Timings (s)   |
+|----------------------------|---------------|
+| Original, mixed precision  | 254.7 ± 0.0   |
+| Original, double precision | 243.8 ± 1.2   |
+| Matrix, double precision   | 240.6 ± 1.0   |
+| Original, DP & `i*dt`      | 199.8 ± 0.0   |
+| Matrix, DP & `i*dt`        | 215.7 ± 1.5 ??   |
+
+* About 22% time saving for best case.
+* Need to double check the last time
+* Still a possibility to look into memory accesses.
 
 
 ## Todo
