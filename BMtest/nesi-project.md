@@ -7,10 +7,11 @@ Keep track of work done in the NeSI project.
 Adding the CMake build system makes it easier to build the code without having
 to remember different command line options.
 
-On Mahuika load the CMake and compiler modules:
+On Mahuika load the CMake and compiler modules (ommitting the version will load
+the latest intel module):
 
 ```
-module load CMake intel
+module load CMake intel/2018b
 ```
 
 Then make a build directory (can be named anything you like) and build the code
@@ -127,6 +128,7 @@ Reducing the number of `i * dt` calculations resulted in the following timings
 ## Todo
 
 * Finish optimising the current code doing a single run
+* compare different compilers and compiler options
 * consider restructuring code with functions (less repeated code)
 * add scripts for running array jobs for many shorter runs at once
 * scripts for parameter sweeps?
