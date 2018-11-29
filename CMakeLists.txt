@@ -1,8 +1,10 @@
 cmake_minimum_required (VERSION 3.0)
+project(cross_correlation LANGUAGES Fortran)
 
-enable_language(Fortran)
+# add testing, can be disabled with -DBUILD_TESTING=OFF
+include(CTest)
 
-option(DOUBLE_PRECISION "Set precision to double" OFF)
+option(DOUBLE_PRECISION "Set precision to double" ON)
 
 if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
@@ -19,3 +21,5 @@ endif()
 
 add_executable(cross_correlation cross_correlation.f90)
 
+# add BMtest directory
+add_subdirectory(BMtest)

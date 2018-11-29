@@ -1,3 +1,6 @@
 cc
 cc.o
 BMtest.txt
+build*/
+benchmark-*/
+slurm-*.out
