@@ -273,6 +273,7 @@ PROGRAM Two_Filter_Cross_Correlation
   H = H + (H_a * N_a) + (H_b * N_b) - (0.5 * i * gamma * sigmapm)
   H = H - (i * SQRT(0.5 * gamma * kappa_a) * MATMUL(sigmam, a_dag))
   H = H - (i * SQRT(0.5 * gamma * kappa_b) * MATMUL(sigmam, b_dag))
+  H = - i * dt * H
   ! H = 0
   ! DO na=0,N
   !   DO nb=0,N
@@ -616,7 +617,7 @@ PROGRAM Two_Filter_Cross_Correlation
                      & psi_clone(nplace_pm1 + 3)
             END IF
             ! Update k vector
-            k1(nplace + m) = -i * dt * (k1(nplace + m) + (temp1 + temp2))
+            k1(nplace + m) = k1(nplace + m) + (temp1 + temp2)
           END DO
         END DO
       END DO
@@ -664,7 +665,7 @@ PROGRAM Two_Filter_Cross_Correlation
                      & (psi_clone(nplace_pm1 + 3) + 0.5 * k1(nplace_pm1 + 3))
             END IF
             ! Update k vector
-            k2(nplace + m) = -i * dt * (k2(nplace + m) + (temp1 + temp2))
+            k2(nplace + m) = k2(nplace + m) + (temp1 + temp2)
           END DO
         END DO
       END DO
@@ -712,7 +713,7 @@ PROGRAM Two_Filter_Cross_Correlation
                      & (psi_clone(nplace_pm1 + 3) + 0.5 * k2(nplace_pm1 + 3))
             END IF
             ! Update k vector
-            k3(nplace + m) = -i * dt * (k3(nplace + m) + (temp1 + temp2))
+            k3(nplace + m) = k3(nplace + m) + (temp1 + temp2)
           END DO
         END DO
       END DO
@@ -765,7 +766,7 @@ PROGRAM Two_Filter_Cross_Correlation
         END DO
       END DO
 
-      psi_clone = psi_clone + xis * (k1 + 2.0*(k2 + k3) - i * dt * k4)
+      psi_clone = psi_clone + xis * (k1 + 2.0*(k2 + k3) + k4)
 
       ! Normalise the state
       trace = 0
