@@ -9,7 +9,7 @@
 #SBATCH --partition=large,prepost
 
 # set the Fortran compiler
-export FC=ifort
+export FC=gfortran
 
 # max_time parameter
 MAX_TIME=25000

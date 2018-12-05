@@ -9,7 +9,7 @@
 #SBATCH --partition=large,prepost
 
 # set the Fortran compiler
-export FC=ifort
+export FC=ftn
 
 # max_time parameter
 MAX_TIME=25000
@@ -19,7 +19,7 @@ MAX_TIME=25000
 SCRATCH_DIR="/nesi/nobackup/${SLURM_JOB_ACCOUNT}/${USER}/scratch-${SLURM_JOB_ID}"
 mkdir -p ${SCRATCH_DIR}
 
-module load intel/2018b
+module load PrgEnv-cray
 module list
 
 echo "Working in ${SCRATCH_DIR}"
@@ -30,7 +30,7 @@ srun cmake ${SLURM_SUBMIT_DIR}/..
 srun make VERBOSE=1
 
 # check the short test passes
-srun ctest --output-on-error -R short
+#srun ctest --output-on-error -R short
 
 # run three times to get average
 echo "Running matrix 1..."
