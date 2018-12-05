@@ -112,17 +112,19 @@ such as taking out the `i * dt`. Will work on these next.
 
 Reducing the number of `i * dt` calculations resulted in the following timings
 
-| Version                    | Timings (s)   |
-|----------------------------|---------------|
-| Original, mixed precision  | 254.7 ± 0.0   |
-| Original, double precision | 243.8 ± 1.2   |
-| Matrix, double precision   | 240.6 ± 1.0   |
-| Original, DP & `i*dt`      | 199.8 ± 0.0   |
-| Matrix, DP & `i*dt`        | 215.7 ± 1.5 ??   |
+| Version                     | Timings (s)    | Notes |
+|-----------------------------|----------------|-------|
+| Original, mixed precision   | 254.7 ± 0.0    |       |
+| Original, double precision  | 243.8 ± 1.2    |       |
+| Matrix, double precision    | 240.6 ± 1.0    |       |
+| Original, DP & `i*dt`       | 199.8 ± 0.0    | Fastest so far |
+| Matrix, DP & `i*dt`         | 215.7 ± 1.5 ?? | Slower than non-matrix |
+| Original, DP, optimisations | 205.3 ± 0.1    | These "optimisations" slowed it down - memory accesses and pre-calculating some values (see optimsations_slower branch) |
 
 * About 22% time saving for best case.
-* Need to double check the last time
-* Still a possibility to look into memory accesses.
+
+
+
 
 
 ## Todo
