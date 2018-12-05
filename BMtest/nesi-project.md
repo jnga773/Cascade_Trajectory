@@ -123,6 +123,26 @@ Reducing the number of `i * dt` calculations resulted in the following timings
 
 * About 22% time saving for best case.
 
+## Comparing compilers
+
+* Intel compiler v18.01 (`module load intel/2018b` and `FC=ifort cmake ..`)
+* GNU compiler v7.1.0 (`module load intel/2018b` and `FC=gfortran cmake ..`)
+* Cray compiler v8.7.1 (`module load PrgEnv-cray` and `FC=ftn cmake ..`)
+
+Note: the flag to get double precision `REAL` with the Cray compiler was `-s real64`. This was added to the CMake build.
+
+| Compiler           | Non-matrix version time (s) | Matrix version time (s) |
+|--------------------|-----------------------------|-------------------------|
+| Intel              | 199.8 ± 0.0                 | 215.7 ± 1.5             |
+| GNU                | 541.2 ± 0.4                 | 533.2 ± 0.5             |
+| Cray               | 219.4 ± 0.4                 | 156.3 ± 0.4             |
+
+* different compilers produce very different results
+* more investigation would be required to understand (vectorisation, other optimsations, ...)
+* Cray matrix version run time approximately 39% less than original version
+
+**TODO:** verify that Cray results look good.
+
 
 
 
