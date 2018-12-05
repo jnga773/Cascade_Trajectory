@@ -141,7 +141,7 @@ Note: the flag to get double precision `REAL` with the Cray compiler was `-s rea
 * more investigation would be required to understand (vectorisation, other optimsations, ...)
 * Cray matrix version run time approximately 39% less than original version
 
-**TODO:** verify that Cray results look good.
+**TODO:** verify that Cray results look good - can't compare directly because the compilers all use different random number generators.
 
 
 
