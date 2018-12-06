@@ -4,6 +4,8 @@ Keep track of work done in the NeSI project.
 
 ## CMake
 
+**Note:** these instructions are for the Intel compiler; check the main README.md file (up one directory) for different compilers.
+
 Adding the CMake build system makes it easier to build the code without having
 to remember different command line options.
 
@@ -24,7 +26,7 @@ mkdir build
 cd build
 
 # configure with intel compiler
-FC=ifort cmake .. -DDOUBLE_PRECISION=ON
+FC=ifort cmake ..
 
 # compile
 make
