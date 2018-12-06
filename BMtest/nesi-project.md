@@ -11,6 +11,7 @@ On Mahuika load the CMake and compiler modules (ommitting the version will load
 the latest intel module):
 
 ```
+# load the CMake and Intel compiler modules
 module load CMake intel/2018b
 ```
 
@@ -18,6 +19,7 @@ Then make a build directory (can be named anything you like) and build the code
 in there, e.g.:
 
 ```
+# create and change to a build directory
 mkdir build
 cd build
 

@@ -22,18 +22,52 @@ CMake and a Fortran compiler (e.g. `gfortran` or `ifort`) is required to build t
 
 ### Mahuika
 
+#### Intel Compiler
+
 From this directory run:
 
 ```
 module load CMake intel
-mkdir build && cd build  # the directory can be called anything you like
+mkdir build-intel && cd build-intel  # the directory can be called anything you like
 
 # build with default options
-cmake ..
+FC=ifort cmake ..
+
+# compile using Intel compiler
+make VERBOSE=1
+```
+
+#### Cray compiler
+
+From this directory run:
+
+```
+module load CMake PrgEnv-cray craype-broadwell
+mkdir build-cray && cd build-cray  # the directory can be called anything you like
+
+# build with default options
+FC=ftn cmake ..
 
 # compile using Intel compiler
 FC=ifort make VERBOSE=1
 ```
+
+#### GNU compiler
+
+From this directory run:
+
+```
+module load CMake intel
+mkdir build-gnu && cd build-gnu  # the directory can be called anything you like
+
+# build with default options
+FC=gfortran cmake ..
+
+# compile using Intel compiler
+FC=ifort make VERBOSE=1
+```
+
+#### Running tests
 
 To run the shorter test cases:
 
