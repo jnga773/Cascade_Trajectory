@@ -49,7 +49,7 @@ mkdir build-cray && cd build-cray  # the directory can be called anything you li
 FC=ftn cmake ..
 
 # compile using Intel compiler
-FC=ifort make VERBOSE=1
+make VERBOSE=1
 ```
 
 #### GNU compiler
@@ -64,7 +64,7 @@ mkdir build-gnu && cd build-gnu  # the directory can be called anything you like
 FC=gfortran cmake ..
 
 # compile using Intel compiler
-FC=ifort make VERBOSE=1
+make VERBOSE=1
 ```
 
 #### Running tests
