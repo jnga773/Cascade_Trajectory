@@ -9,7 +9,7 @@
 #SBATCH --partition=large,prepost
 
 # set the Fortran compiler
-export FC=ifort
+export FC=gfortran
 
 # max_time parameter
 MAX_TIME=25000
@@ -33,12 +33,12 @@ srun make VERBOSE=1
 srun ctest --output-on-error -R short
 
 # run three times to get average
-echo "Running 1..."
-time srun ./BMtest/cctest ${MAX_TIME}
-echo "Running 2..."
-time srun ./BMtest/cctest ${MAX_TIME}
-echo "Running 3..."
-time srun ./BMtest/cctest ${MAX_TIME}
+echo "Running matrix 1..."
+time srun ./BMtest/cctest_matrix ${MAX_TIME}
+echo "Running matrix 2..."
+time srun ./BMtest/cctest_matrix ${MAX_TIME}
+echo "Running matrix 3..."
+time srun ./BMtest/cctest_matrix ${MAX_TIME}
 
 cd "${SLURM_SUBMIT_DIR}"
-mv ${SCRATCH_DIR} ./benchmark-${SLURM_JOB_ID}-${FC}
+mv ${SCRATCH_DIR} ./benchmark-matrix-${SLURM_JOB_ID}-${FC}

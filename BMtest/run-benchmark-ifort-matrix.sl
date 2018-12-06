@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --hint=nomultithread
 #SBATCH --mem=500M
-#SBATCH --partition=large
+#SBATCH --partition=large,prepost
 
 # set the Fortran compiler
 export FC=ifort
@@ -33,12 +33,12 @@ srun make VERBOSE=1
 srun ctest --output-on-error -R short
 
 # run three times to get average
-echo "Running 1..."
+echo "Running matrix 1..."
 time srun ./BMtest/cctest_matrix ${MAX_TIME}
-echo "Running 2..."
+echo "Running matrix 2..."
 time srun ./BMtest/cctest_matrix ${MAX_TIME}
-echo "Running 3..."
+echo "Running matrix 3..."
 time srun ./BMtest/cctest_matrix ${MAX_TIME}
 
 cd "${SLURM_SUBMIT_DIR}"
-mv ${SCRATCH_DIR} ./benchmark-${SLURM_JOB_ID}-${FC}
+mv ${SCRATCH_DIR} ./benchmark-matrix-${SLURM_JOB_ID}-${FC}

@@ -4,6 +4,8 @@ Keep track of work done in the NeSI project.
 
 ## CMake
 
+**Note:** these instructions are for the Intel compiler; check the main README.md file (up one directory) for different compilers.
+
 Adding the CMake build system makes it easier to build the code without having
 to remember different command line options.
 
@@ -11,6 +13,7 @@ On Mahuika load the CMake and compiler modules (ommitting the version will load
 the latest intel module):
 
 ```
+# load the CMake and Intel compiler modules
 module load CMake intel/2018b
 ```
 
@@ -18,11 +21,12 @@ Then make a build directory (can be named anything you like) and build the code
 in there, e.g.:
 
 ```
+# create and change to a build directory
 mkdir build
 cd build
 
 # configure with intel compiler
-FC=ifort cmake .. -DDOUBLE_PRECISION=ON
+FC=ifort cmake ..
 
 # compile
 make
@@ -112,17 +116,39 @@ such as taking out the `i * dt`. Will work on these next.
 
 Reducing the number of `i * dt` calculations resulted in the following timings
 
-| Version                    | Timings (s)   |
-|----------------------------|---------------|
-| Original, mixed precision  | 254.7 ± 0.0   |
-| Original, double precision | 243.8 ± 1.2   |
-| Matrix, double precision   | 240.6 ± 1.0   |
-| Original, DP & `i*dt`      | 199.8 ± 0.0   |
-| Matrix, DP & `i*dt`        | 215.7 ± 1.5 ??   |
+| Version                     | Timings (s)    | Notes |
+|-----------------------------|----------------|-------|
+| Original, mixed precision   | 254.7 ± 0.0    |       |
+| Original, double precision  | 243.8 ± 1.2    |       |
+| Matrix, double precision    | 240.6 ± 1.0    |       |
+| Original, DP & `i*dt`       | 199.8 ± 0.0    | Fastest so far |
+| Matrix, DP & `i*dt`         | 215.7 ± 1.5 ?? | Slower than non-matrix |
+| Original, DP, optimisations | 205.3 ± 0.1    | These "optimisations" slowed it down - memory accesses and pre-calculating some values (see optimsations_slower branch) |
 
 * About 22% time saving for best case.
-* Need to double check the last time
-* Still a possibility to look into memory accesses.
+
+## Comparing compilers
+
+* Intel compiler v18.01 (`module load intel/2018b` and `FC=ifort cmake ..`)
+* GNU compiler v7.1.0 (`module load intel/2018b` and `FC=gfortran cmake ..`)
+* Cray compiler v8.7.1 (`module load PrgEnv-cray` and `FC=ftn cmake ..`)
+
+Note: the flag to get double precision `REAL` with the Cray compiler was `-s real64`. This was added to the CMake build.
+
+| Compiler           | Non-matrix version time (s) | Matrix version time (s) |
+|--------------------|-----------------------------|-------------------------|
+| Intel              | 199.8 ± 0.0                 | 215.7 ± 1.5             |
+| GNU                | 541.2 ± 0.4                 | 533.2 ± 0.5             |
+| Cray               | 219.4 ± 0.4                 | 156.3 ± 0.4             |
+
+* different compilers produce very different results
+* more investigation would be required to understand (vectorisation, other optimsations, ...)
+* Cray matrix version run time approximately 39% less than original version
+
+**TODO:** verify that Cray results look good - can't compare directly because the compilers all use different random number generators.
+
+
+
 
 
 ## Todo
