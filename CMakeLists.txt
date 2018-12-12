@@ -30,3 +30,6 @@ add_executable(cross_correlation cross_correlation.f90)
 
 # add BMtest directory
 add_subdirectory(BMtest)
+
+# add slurm directory
+add_subdirectory(slurm)
