@@ -1,9 +1,9 @@
 #!/bin/bash -e
-#SBATCH --time=01:00:00
-#SBATCH --mem=500M
+# Don't edit this file, look at run_array.py instead
 #SBATCH --partition=large
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
+#SBATCH --hint=nomultithread
 #SBATCH --output=%5a/slurm-%A-%5a.out
 
 # program to run (set from CMake)

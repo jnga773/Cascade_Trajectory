@@ -21,6 +21,8 @@ def main():
     parser.add_argument('array_size', type=int, help="How many jobs to submit in the array")
     parser.add_argument('--account', default=None, help="NeSI project code")
     parser.add_argument('--name', default="CascadeTrajectory", help="Job name for the queue")
+    parser.add_argument('--time', default="01:00:00", help="Time per job, for the queue (default is 1 hour)")
+    parser.add_argument('--mem', default="500M", help="Memory per job, for the queue (default is 500 MB)")
     parser.add_argument('--output-dir', default=None, help="Output directory (will have timestamp appended - default is just timestamp)")
     args = parser.parse_args()
 
@@ -53,6 +55,8 @@ def main():
     cmd = ["sbatch", "--array=1-{}".format(args.array_size)]
     if args.account is not None:
         cmd.append("--account={}".format(args.account))
+    cmd.append("--time={}".format(args.time))
+    cmd.append("--mem={}".format(args.mem))
     cmd.append("--job-name={}".format(args.name))
     cmd.append(SLURM_SCRIPT)
     print(cmd)
