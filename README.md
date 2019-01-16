@@ -86,3 +86,40 @@ There is a longer test case that is used for benchmarking, e.g.:
 ```
 ctest -R long -V
 ```
+
+## Array job
+
+There are scripts to make it easier to run many copies of the same simulation
+as an array job on Mahuika.
+
+Here is an example of how to run an array job:
+
+```
+# configure and build the code like normal
+mkdir array-job-test
+cd array-job-test
+module load PrgEnv-cray CMake
+FC=ftn cmake ..
+make -j
+
+# look at the options in the array job script
+./run-array.py --help
+
+# submit 20 jobs (with default memory and time limits, 500 MB and 1 hour)
+./run-array.py --name=arraytest 20
+
+# check the queue
+squeue -u $USER
+```
+
+The output folder was printed to standard output when running the Python script
+and starts with "arraytest.XXXXX" where XXXXX is a timestamp and "arraytest"
+was the argument passed to `--name`. Each job in the array has its own directory
+where its output is stored.
+
+This runs the `cctest_matrix` executable by default but this can be changed, for
+example to the `cctest` executable:
+
+```
+cmake . -DARRAY_JOB_EXE=BMtest/cctest
+```
