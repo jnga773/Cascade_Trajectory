@@ -147,15 +147,16 @@ Note: the flag to get double precision `REAL` with the Cray compiler was `-s rea
 
 **TODO:** verify that Cray results look good - can't compare directly because the compilers all use different random number generators.
 
+## Array jobs
+
+Adding array jobs to run many copies of the same calculation.
+
+See the section in the main [README.md](../README.md#array-job)
 
 
 
 
 ## Todo
 
-* Finish optimising the current code doing a single run
-* compare different compilers and compiler options
-* consider restructuring code with functions (less repeated code)
 * add scripts for running array jobs for many shorter runs at once
-* scripts for parameter sweeps?
-
+* array jobs for parameter sweeps?
