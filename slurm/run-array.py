@@ -19,24 +19,19 @@ def main():
     # parse arguments
     parser = argparse.ArgumentParser(description="Run Cascade Trajectory array job")
     parser.add_argument('array_size', type=int, help="How many jobs to submit in the array")
-    parser.add_argument('--account', default=None, help="NeSI project code")
-    parser.add_argument('--name', default="CascadeTrajectory", help="Job name for the queue")
-    parser.add_argument('--time', default="01:00:00", help="Time per job, for the queue (default is 1 hour)")
-    parser.add_argument('--mem', default="500M", help="Memory per job, for the queue (default is 500 MB)")
-    parser.add_argument('--output-dir', default=None, help="Output directory (will have timestamp appended - default is just timestamp)")
+    parser.add_argument('--account', default=None, help="NeSI project code (only required if not using your default project)")
+    parser.add_argument('--name', default="CascadeTrajectory", help='Job name for the queue and naming output directory (default="CascadeTrajectory")')
+    parser.add_argument('--time', default="01:00:00", help='Time per job, for the queue (default is "01:00:00", i.e. 1 hour)')
+    parser.add_argument('--mem', default="500M", help='Memory per job, for the queue (default is "500", i.e. 500 MB)')
     args = parser.parse_args()
 
     print("Submitting job name: {}".format(args.name))
     print("Array size: {}".format(args.array_size))
 
     # need to make a directory for running the simulation in
-    # based on current date and time? if not passed in as arg...
+    # based on current date and time to make it unique
     timestamp = datetime.datetime.now().strftime("%y%m%dT%H%M%S")
-    print("Timestamp: {}".format(timestamp))
-    if args.output_dir is None:
-        output_dir = timestamp
-    else:
-        output_dir = args.output_dir + ".{}".format(timestamp)
+    output_dir = args.name + "." + timestamp
 
     if os.path.exists(output_dir):
         print("Error: output directory exists: '{}'".format(output_dir))

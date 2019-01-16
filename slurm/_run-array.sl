@@ -7,7 +7,7 @@
 #SBATCH --output=%5a/slurm-%A-%5a.out
 
 # program to run (set from CMake)
-EXECUTABLE=@ARRAY_JOB_EXECUTABLE@
+EXECUTABLE=@ARRAY_JOB_EXE@
 
 # check we are in an array job
 if [[ -z "${SLURM_ARRAY_TASK_ID}" ]]; then
