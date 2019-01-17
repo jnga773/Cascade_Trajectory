@@ -158,5 +158,5 @@ See the section in the main [README.md](../README.md#array-job)
 
 ## Todo
 
-* add scripts for running array jobs for many shorter runs at once
-* array jobs for parameter sweeps?
+* add a namelist for some parameters
+* example array job for sweeping across omega parameter (in namelist)
