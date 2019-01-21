@@ -102,6 +102,10 @@ module load PrgEnv-cray CMake
 FC=ftn cmake ..
 make -j
 
+# edit the params.nml file if required (e.g. to update run time)
+# each simulation will use the same input file
+nano params.nml
+
 # look at the options in the array job script
 ./run-array.py --help
 
@@ -122,4 +126,34 @@ example to the `cctest` executable:
 
 ```
 cmake . -DARRAY_JOB_EXE=BMtest/cctest
+```
+
+### Parameter sweeps
+
+Sweeping over values for a single parameter can also be done using the array
+job script. Similar to the above, this is an example of a parameter sweep for
+the `omega` parameter, with values from 1.0 to 10.0 by 1.0, and submitting 10
+jobs per value:
+
+```
+# configure and build the code like normal
+mkdir parameter-sweep-test
+cd parameter-sweep-test
+module load PrgEnv-cray CMake
+FC=ftn cmake ..
+make -j
+
+# edit the params.nml file if required (e.g. to update run time)
+# each simulation will use the same input file with the parameter
+# sweep variable modified by the python script
+nano params.nml
+
+# look at the options in the array job script
+./run-array.py --help
+
+# submit 10 jobs per value in the sweep
+./run-array.py --name=sweeptest --sweep=omega --sweep=min=1.0 --sweep-max=10.0 --sweep-step=1 10
+
+# check the queue
+squeue -u $USER
 ```
