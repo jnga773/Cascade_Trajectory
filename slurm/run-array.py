@@ -10,6 +10,7 @@ import sys
 import argparse
 import subprocess
 import datetime
+import shutil
 
 
 SLURM_SCRIPT = "@CMAKE_BINARY_DIR@/_run-array.sl"
@@ -23,10 +24,15 @@ def main():
     parser.add_argument('--name', default="CascadeTrajectory", help='Job name for the queue and naming output directory (default="CascadeTrajectory")')
     parser.add_argument('--time', default="01:00:00", help='Time per job, for the queue (default is "01:00:00", i.e. 1 hour)')
     parser.add_argument('--mem', default="500M", help='Memory per job, for the queue (default is "500", i.e. 500 MB)')
+    parser.add_argument('--input', default='params.nml', help='Input namelist file (default="params.nml")')
     args = parser.parse_args()
 
     print("Submitting job name: {}".format(args.name))
     print("Array size: {}".format(args.array_size))
+
+    # full path to input file
+    input_file = os.path.abspath(args.input)
+    print("Input file: {}".format(input_file))
 
     # need to make a directory for running the simulation in
     # based on current date and time to make it unique
@@ -44,7 +50,9 @@ def main():
 
     # make an output directory for each job
     for i in range(1, args.array_size + 1):
-        os.mkdir("%05d" % i)
+        dirname = "%05d" % i
+        os.mkdir(dirname)
+        shutil.copy(input_file, dirname)
 
     # build the submit command
     cmd = ["sbatch", "--array=1-{}".format(args.array_size)]

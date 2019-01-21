@@ -2,6 +2,9 @@
 add_executable(cctest cc.f90)
 add_executable(cctest_matrix cc_matrix.f90)
 
+# copy the input file to the main directory
+configure_file(params.nml ${CMAKE_BINARY_DIR} COPYONLY)
+
 if (BUILD_TESTING)
     # Python is required for comparison
     find_package(PythonInterp)
