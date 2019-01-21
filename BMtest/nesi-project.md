@@ -152,11 +152,17 @@ Note: the flag to get double precision `REAL` with the Cray compiler was `-s rea
 Adding array jobs to run many copies of the same calculation.
 
 See the section in the main [README.md](../README.md#array-job)
+o
+## Namelist input file
 
+To make it easier to implement parameter sweeps a namelist input file was added
+(*params.nml*). Initially a subset of parameters have been moved into this
+file. It must be present when running the code (a copy will be placed in the
+build directory that can be edited if required).
 
+## Parameter sweeps
 
-
-## Todo
-
-* add a namelist for some parameters
-* example array job for sweeping across omega parameter (in namelist)
+Building on the array jobs, it is now possible to do parameter sweeps over a
+range of values for a single parameter. Multiple simulations can be run for
+each value in the sweep. See [README.md](../README.md#parameter-sweeps) for
+details.
