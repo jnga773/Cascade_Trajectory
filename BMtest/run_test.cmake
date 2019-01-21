@@ -18,6 +18,11 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_RUN_DIR})
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_RUN_DIR})
 
 #
+# copy input file
+#
+file(COPY ${TEST_SRC_DIR}/params.nml DESTINATION ${TEST_RUN_DIR})
+
+#
 # run the code
 #
 execute_process(

@@ -4,36 +4,35 @@ PROGRAM Two_Filter_Cross_Correlation
 
   ! Parameters in terms of decay rate gamma
   ! Atom decay rate
-  REAL, PARAMETER :: gamma = 1.0
+  REAL :: gamma
   ! Drive strength (Rabi Frequency)
-  REAL, PARAMETER :: omega = 40.0
+  REAL :: omega
   ! Drive detuning from two-photon resonance, \omega_{d} - \omega_{gf}
-  REAL, PARAMETER :: delta = 0.0
+  REAL :: delta
   ! Drive strength ratio of the two levels, |g> <-> |e> and |e> <-> |f>
-  REAL, PARAMETER :: xi = 1.0
+  REAL :: xi
   ! Difference between two energy levels, \omega_{ef} - \omega_{ge}
-  REAL, PARAMETER :: alpha = -120.0
+  REAL :: alpha
 
   ! Eigenfrequencies for position of spectrum peaks for delta = 0
   ! eigen drive strength
-  REAL, PARAMETER :: Omega_t = SQRT(((0.25*alpha)**2) + ((0.5*omega) &
-                                     & ** 2) * (1 + (xi ** 2)))
+  REAL :: Omega_t
   ! Positive eigenfrequency
-  REAL, PARAMETER :: wp = -(0.25 * alpha) + Omega_t
+  REAL :: wp
   ! Negative eigenfrequency
-  REAL, PARAMETER :: wm = -(0.25 * alpha) - Omega_t
+  REAL :: wm
 
   ! Filter parameter stuff
   ! Detuning of cavity "a" resonance frequency with drive frequency
   ! \Delta_{f} = \omega_{0} - \omega_{d}. \Delta_{f} = 0 is resonant with
   ! \omega_{gf} / 2 if \delta = 0.
-  REAL, PARAMETER :: D_a = -wm
+  REAL :: D_a
   ! Detuning of cavity "b" resonance frequency with drive frequency
-  REAL, PARAMETER :: D_b = wm
+  REAL :: D_b
   ! Cavity linewidth/transmission of cavity a
-  REAL, PARAMETER :: kappa_a = 10.0
+  REAL :: kappa_a
   ! Cavity linewidth/transmission of cavity b
-  REAL, PARAMETER :: kappa_b = 10.0
+  REAL :: kappa_b
 
   ! Quantum object stuff
   ! Hilbert Space - max number of photons in cavity 0 -> N
@@ -113,23 +112,23 @@ PROGRAM Two_Filter_Cross_Correlation
 
   ! Time saver stuff
   ! Cavity a Hamiltonian constant
-  COMPLEX, PARAMETER :: H_a = D_a - i * kappa_a
+  COMPLEX :: H_a
   ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
-  COMPLEX, PARAMETER :: cas_a = SQRT(0.5 * gamma * kappa_a)
+  COMPLEX :: cas_a
   ! Cavity b Hamiltonian constant
-  COMPLEX, PARAMETER :: H_b = D_b - i * kappa_b
+  COMPLEX :: H_b
   ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
-  COMPLEX, PARAMETER :: cas_b = SQRT(0.5 * gamma * kappa_b)
+  COMPLEX :: cas_b
   ! Squrare root of half gamma
-  REAL, PARAMETER :: sqrt_gamma = SQRT(0.5 * gamma)
+  REAL :: sqrt_gamma
   ! Square root of kappa_a
-  REAL, PARAMETER :: sqrt_kappa_a = SQRT(kappa_a)
+  REAL :: sqrt_kappa_a
   ! Square root of kappa_b
-  REAL, PARAMETER :: sqrt_kappa_b = SQRT(kappa_b)
+  REAL :: sqrt_kappa_b
   ! Square root of gamma * kappa_a
-  REAL, PARAMETER :: sqrt_gamma_a = SQRT(gamma * kappa_a)
+  REAL :: sqrt_gamma_a
   ! Square root of gamma * kappa_b
-  REAL, PARAMETER :: sqrt_gamma_b = SQRT(gamma * kappa_b)
+  REAL :: sqrt_gamma_b
 
   ! Probability stuff
   ! Probability to jump for cavity a
@@ -177,6 +176,83 @@ PROGRAM Two_Filter_Cross_Correlation
   INTEGER :: nargs
   INTEGER :: ios
   CHARACTER(LEN=32) :: buffer
+
+  ! namelists
+  INTEGER :: iunit
+  INTEGER :: istat
+  CHARACTER(LEN=512) :: line
+  NAMELIST /PARAMS/ gamma, omega, delta, xi, alpha
+
+  ! initialising variables from namelists
+
+  ! Parameters in terms of decay rate gamma
+  ! Atom decay rate
+  gamma = 1.0
+  ! Drive strength (Rabi Frequency)
+  omega = 40.0
+  ! Drive detuning from two-photon resonance, \omega_{d} - \omega_{gf}
+  delta = 0.0
+  ! Drive strength ratio of the two levels, |g> <-> |e> and |e> <-> |f>
+  xi = 1.0
+  ! Difference between two energy levels, \omega_{ef} - \omega_{ge}
+  alpha = -120.0
+
+  ! read the PARAMS namelist
+  iunit = 31
+  OPEN(iunit, FILE="params.nml", STATUS="OLD", DELIM="QUOTE")
+  READ(iunit, NML=PARAMS, IOSTAT=istat)
+  IF (istat .NE. 0) THEN
+    BACKSPACE(iunit)
+    READ(iunit, FMT='(A)') line
+    CLOSE(iunit)
+    PRINT *, "Invalid line in PARAMS namelist: " // TRIM(line)
+    CALL EXIT(1)
+  END IF
+  CLOSE(iunit)
+  print *, "DEBUG: gamma is: ", gamma
+
+  ! Eigenfrequencies for position of spectrum peaks for delta = 0
+  ! eigen drive strength
+  Omega_t = SQRT(((0.25*alpha)**2) + ((0.5*omega) &
+                                     & ** 2) * (1 + (xi ** 2)))
+  ! Positive eigenfrequency
+  wp = -(0.25 * alpha) + Omega_t
+  ! Negative eigenfrequency
+  wm = -(0.25 * alpha) - Omega_t
+
+  ! Filter parameter stuff
+  ! Detuning of cavity "a" resonance frequency with drive frequency
+  ! \Delta_{f} = \omega_{0} - \omega_{d}. \Delta_{f} = 0 is resonant with
+  ! \omega_{gf} / 2 if \delta = 0.
+  D_a = -wm
+  ! Detuning of cavity "b" resonance frequency with drive frequency
+  D_b = wm
+  ! Cavity linewidth/transmission of cavity a
+  kappa_a = 10.0
+  ! Cavity linewidth/transmission of cavity b
+  kappa_b = 10.0
+
+  ! Time saver stuff
+  ! Cavity a Hamiltonian constant
+  H_a = D_a - i * kappa_a
+  ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
+  cas_a = SQRT(0.5 * gamma * kappa_a)
+  ! Cavity b Hamiltonian constant
+  H_b = D_b - i * kappa_b
+  ! Cavity a cascade constant \sqrt{0.5 * \gamma * \kappa_{a}}
+  cas_b = SQRT(0.5 * gamma * kappa_b)
+  ! Squrare root of half gamma
+  sqrt_gamma = SQRT(0.5 * gamma)
+  ! Square root of kappa_a
+  sqrt_kappa_a = SQRT(kappa_a)
+  ! Square root of kappa_b
+  sqrt_kappa_b = SQRT(kappa_b)
+  ! Square root of gamma * kappa_a
+  sqrt_gamma_a = SQRT(gamma * kappa_a)
+  ! Square root of gamma * kappa_b
+  sqrt_gamma_b = SQRT(gamma * kappa_b)
+
+
 
   ! read arguments to set number of steps for testing
   nargs = COMMAND_ARGUMENT_COUNT()
