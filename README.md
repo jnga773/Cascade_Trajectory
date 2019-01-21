@@ -151,8 +151,8 @@ nano params.nml
 # look at the options in the array job script
 ./run-array.py --help
 
-# submit 10 jobs per value in the sweep
-./run-array.py --name=sweeptest --sweep=omega --sweep=min=1.0 --sweep-max=10.0 --sweep-step=1 10
+# submit 10 jobs per value in the sweep (100 in total)
+./run-array.py --name=sweeptest --sweep=omega --sweep-min=1.0 --sweep-max=10.0 --sweep-step=1 10
 
 # check the queue
 squeue -u $USER
