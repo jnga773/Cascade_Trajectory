@@ -172,16 +172,13 @@ PROGRAM Two_Filter_Cross_Correlation
   ! temporal variable to compare against last_sect and cycle in benchmark
   INTEGER :: temp_bm
 
-  ! variables for reading command line arguments
-  INTEGER :: nargs
-  INTEGER :: ios
-  CHARACTER(LEN=32) :: buffer
-
   ! namelists
   INTEGER :: iunit
   INTEGER :: istat
   CHARACTER(LEN=512) :: line
   NAMELIST /PARAMS/ gamma, omega, delta, xi, alpha
+  NAMELIST /TIME/ max_time
+
 
   ! initialising variables from namelists
 
@@ -208,7 +205,7 @@ PROGRAM Two_Filter_Cross_Correlation
     PRINT *, "Invalid line in PARAMS namelist: " // TRIM(line)
     CALL EXIT(1)
   END IF
-  CLOSE(iunit)
+  CLOSE(IUNIT)
   print *, "DEBUG: gamma is: ", gamma
 
   ! Eigenfrequencies for position of spectrum peaks for delta = 0
@@ -252,23 +249,23 @@ PROGRAM Two_Filter_Cross_Correlation
   ! Square root of gamma * kappa_b
   sqrt_gamma_b = SQRT(gamma * kappa_b)
 
-
-
-  ! read arguments to set number of steps for testing
-  nargs = COMMAND_ARGUMENT_COUNT()
-  IF (nargs .NE. 1) THEN
-    ! default
-    max_time = 1000.0
-  ELSE
-    CALL GET_COMMAND_ARGUMENT(1, buffer)
-    READ(buffer, *, iostat=ios) max_time
-    IF (ios .NE. 0) THEN
-      PRINT *, 'error reading max_time argument'
-      CALL EXIT(1)
-    END IF
+  ! Default value for max time, in units of \gamma \tau
+  max_time = 1000.0
+  
+  ! read the TIME namelist
+  iunit = 31
+  OPEN(iunit, FILE="params.nml", STATUS="OLD", DELIM="QUOTE")
+  READ(iunit, NML=TIME, IOSTAT=istat)
+  IF (istat .NE. 0) THEN
+    BACKSPACE(iunit)
+    READ(iunit, FMT='(A)') line
+    CLOSE(iunit)
+    PRINT *, "Invalid line in TIME namelist: " // TRIM(line)
+    CALL EXIT(1)
   END IF
+  CLOSE(iunit)
 
-  ! set the number of steps based on input
+  ! set the number of steps based on max_time value
   steps = INT(max_time / dt, KIND=8)
   PRINT *, "MAX TIME AND STEPS: ", max_time, steps
 

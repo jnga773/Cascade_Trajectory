@@ -8,5 +8,5 @@
 /
 
 &TIME
-    max_time = 1000.0     ! max time in units of \gamma \tau
+    max_time = @MAX_TIME@     ! max time in units of \gamma \tau
 /

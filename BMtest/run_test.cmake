@@ -5,7 +5,7 @@ message(STATUS "Running trajectories test")
 message(STATUS "  Test run directory: ${TEST_RUN_DIR}")
 message(STATUS "  Test src directory: ${TEST_SRC_DIR}")
 message(STATUS "  Test binary: ${TEST_BINARY}")
-message(STATUS "  Test steps: ${TEST_STEPS}")
+message(STATUS "  Max time: ${MAX_TIME}")
 message(STATUS "  Compare script: ${COMPARE_SCRIPT}")
 message(STATUS "  Reference file: ${REF_FILE}")
 message(STATUS "  Python found: ${PYTHON_FOUND}")
@@ -20,13 +20,14 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${TEST_RUN_DIR})
 #
 # copy input file
 #
-file(COPY ${TEST_SRC_DIR}/params.nml DESTINATION ${TEST_RUN_DIR})
+#file(COPY ${TEST_SRC_DIR}/params.nml DESTINATION ${TEST_RUN_DIR})
+configure_file(${TEST_SRC_DIR}/params_test.nml.in ${TEST_RUN_DIR}/params.nml @ONLY)
 
 #
 # run the code
 #
 execute_process(
-    COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_RUN_DIR} ${TEST_BINARY} ${TEST_STEPS}
+    COMMAND ${CMAKE_COMMAND} -E chdir ${TEST_RUN_DIR} ${TEST_BINARY} ${MAX_TIME}
     RESULT_VARIABLE status
 )
 if (status)
