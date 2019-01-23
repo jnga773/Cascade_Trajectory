@@ -4,3 +4,5 @@ BMtest.txt
 build*/
 benchmark-*/
 slurm-*.out
+array-job-test/
+parameter-sweep-test/

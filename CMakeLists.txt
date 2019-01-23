@@ -30,3 +30,9 @@ add_executable(cross_correlation cross_correlation.f90)
 
 # add BMtest directory
 add_subdirectory(BMtest)
+
+# default executable used in array jobs
+set(ARRAY_JOB_EXE "${CMAKE_BINARY_DIR}/BMtest/cctest_matrix" CACHE FILEPATH "Path to executable to run in array jobs")
+
+# add slurm directory (array jobs)
+add_subdirectory(slurm)

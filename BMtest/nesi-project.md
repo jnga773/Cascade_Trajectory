@@ -147,15 +147,22 @@ Note: the flag to get double precision `REAL` with the Cray compiler was `-s rea
 
 **TODO:** verify that Cray results look good - can't compare directly because the compilers all use different random number generators.
 
+## Array jobs
 
+Adding array jobs to run many copies of the same calculation.
 
+See the section in the main [README.md](../README.md#array-job)
+o
+## Namelist input file
 
+To make it easier to implement parameter sweeps a namelist input file was added
+(*params.nml*). Initially a subset of parameters have been moved into this
+file. It must be present when running the code (a copy will be placed in the
+build directory that can be edited if required).
 
-## Todo
+## Parameter sweeps
 
-* Finish optimising the current code doing a single run
-* compare different compilers and compiler options
-* consider restructuring code with functions (less repeated code)
-* add scripts for running array jobs for many shorter runs at once
-* scripts for parameter sweeps?
-
+Building on the array jobs, it is now possible to do parameter sweeps over a
+range of values for a single parameter. Multiple simulations can be run for
+each value in the sweep. See [README.md](../README.md#parameter-sweeps) for
+details.

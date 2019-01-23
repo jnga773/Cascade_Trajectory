@@ -86,3 +86,74 @@ There is a longer test case that is used for benchmarking, e.g.:
 ```
 ctest -R long -V
 ```
+
+## Array job
+
+There are scripts to make it easier to run many copies of the same simulation
+as an array job on Mahuika.
+
+Here is an example of how to run an array job:
+
+```
+# configure and build the code like normal
+mkdir array-job-test
+cd array-job-test
+module load PrgEnv-cray CMake
+FC=ftn cmake ..
+make -j
+
+# edit the params.nml file if required (e.g. to update run time)
+# each simulation will use the same input file
+nano params.nml
+
+# look at the options in the array job script
+./run-array.py --help
+
+# submit 20 jobs (with default memory and time limits, 500 MB and 1 hour)
+./run-array.py --name=arraytest 20
+
+# check the queue
+squeue -u $USER
+```
+
+The output folder was printed to standard output when running the Python script
+and starts with "arraytest.XXXXX" where XXXXX is a timestamp and "arraytest"
+was the argument passed to `--name`. Each job in the array has its own directory
+where its output is stored.
+
+This runs the `cctest_matrix` executable by default but this can be changed, for
+example to the `cctest` executable:
+
+```
+cmake . -DARRAY_JOB_EXE=BMtest/cctest
+```
+
+### Parameter sweeps
+
+Sweeping over values for a single parameter can also be done using the array
+job script. Similar to the above, this is an example of a parameter sweep for
+the `omega` parameter, with values from 1.0 to 10.0 by 1.0, and submitting 10
+jobs per value:
+
+```
+# configure and build the code like normal
+mkdir parameter-sweep-test
+cd parameter-sweep-test
+module load PrgEnv-cray CMake
+FC=ftn cmake ..
+make -j
+
+# edit the params.nml file if required (e.g. to update run time)
+# each simulation will use the same input file with the parameter
+# sweep variable modified by the python script
+nano params.nml
+
+# look at the options in the array job script
+./run-array.py --help
+
+# submit 10 jobs per value in the sweep (100 in total)
+./run-array.py --name=sweeptest --sweep=omega --sweep-min=1.0 --sweep-max=10.0 --sweep-step=1 10
+
+# check the queue
+squeue -u $USER
+```
